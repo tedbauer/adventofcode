@@ -1,0 +1,16 @@
+use humanwritten::{register_day, Solution};
+use std::io::{self, BufRead};
+
+pub struct Day{{PADDED_DAY}};
+
+impl Solution for Day{{PADDED_DAY}} {
+    fn run_part1(&self, input: &str) -> io::Result<String> {
+        Ok("Not yet implemented".to_string())
+    }
+
+    fn run_part2(&self, input: &str) -> io::Result<String> {
+        Ok("Not yet implemented".to_string())
+    }
+}
+
+register_day!({{DAY}}, Day{{PADDED_DAY}});

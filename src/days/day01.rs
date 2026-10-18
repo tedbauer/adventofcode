@@ -1,4 +1,4 @@
-use humanwritten::{register_day, Solution};
+use humanwritten::{Solution, register_day};
 use std::io::{self, BufRead};
 
 pub struct Day01;
@@ -39,10 +39,6 @@ impl Solution for Day01 {
 
     fn run_part2(&self, input: &str) -> io::Result<String> {
         let masses = read_masses(input)?;
-        let total_fuel_recursive = masses
-            .iter()
-            .map(|mass| compute_recursive_fuel(0, *mass))
-            .sum::<u32>();
         let total_fuel_recursive = masses
             .iter()
             .map(|mass| compute_recursive_fuel(0, *mass))

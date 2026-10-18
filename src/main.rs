@@ -1,7 +1,7 @@
 use std::io::{self};
 mod days;
-use humanwritten::{Solution, DayEntry};
 use clap::Parser;
+use humanwritten::{DayEntry, Solution};
 use std::fs;
 
 #[derive(Parser, Debug)]
@@ -25,7 +25,7 @@ fn main() -> io::Result<()> {
 
         found.unwrap_or_else(|| {
             panic!(
-                "No solution found for {0}, add one with `cargo run --bin scaffold {0}`.",
+                "No solution found for {0}, add one with `cargo xtask scaffold {0}`.",
                 args.solution_number
             )
         })
