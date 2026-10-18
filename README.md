@@ -11,8 +11,8 @@ cargo xtask scaffold <number> # <number> is the day you'd like to add
 ```
 
 This will create two files:
-- `src/days/day<number>.rs` # Write your solution here
-- `input/day<number>.txt>` # Paste your input here
+- `src/days/day<number>.rs`: write your solution here.
+- `input/day<number>.txt>`: paste your input here.
 
 ## Run solutions
 
