@@ -1,5 +1,5 @@
 use humanwritten::{Solution, register_day};
-use std::io::{self, BufRead};
+use std::io::{self};
 
 pub struct Day01;
 
