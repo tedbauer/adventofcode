@@ -141,6 +141,66 @@ fn parse_wires(input: &str) -> io::Result<WireInstructions> {
     }
 }
 
+fn find_steps_sum_single(target: (i32, i32), instructions: &[Instruction]) -> io::Result<i32> {
+    let mut pos = (0, 0);
+    let mut steps = 0;
+
+    for instr in instructions {
+        match instr {
+            Instruction::Left { distance } => {
+                for x in 0..*distance {
+                    pos.0 -= 1;
+                    steps += 1;
+
+                    if target == pos {
+                        return Ok(steps);
+                    }
+                }
+            }
+            Instruction::Right { distance } => {
+                for x in 0..*distance {
+                    pos.0 += 1;
+                    steps += 1;
+
+                    if target == pos {
+                        return Ok(steps);
+                    }
+                }
+            }
+            Instruction::Up { distance } => {
+                for y in 0..*distance {
+                    pos.1 += 1;
+                    steps += 1;
+
+                    if target == pos {
+                        return Ok(steps);
+                    }
+                }
+            }
+            Instruction::Down { distance } => {
+                for y in 0..*distance {
+                    pos.1 -= 1;
+                    steps += 1;
+
+                    if target == pos {
+                        return Ok(steps);
+                    }
+                }
+            }
+        }
+    }
+
+    Err(io::Error::new(
+        io::ErrorKind::InvalidData,
+        "couldn't find the target",
+    ))
+}
+
+fn find_steps_sum(coord: (i32, i32), wire_instrs: &WireInstructions) -> io::Result<i32> {
+    Ok(find_steps_sum_single(coord, &wire_instrs.wire_1_instrs)?
+        + find_steps_sum_single(coord, &wire_instrs.wire_2_instrs)?)
+}
+
 impl Solution for Day03 {
     fn run_part1(&self, input: &str) -> io::Result<String> {
         let wire_instructions = parse_wires(input)?;
@@ -157,7 +217,20 @@ impl Solution for Day03 {
     }
 
     fn run_part2(&self, input: &str) -> io::Result<String> {
-        Ok("Not yet implemented".to_string())
+        let wire_instructions = parse_wires(input)?;
+        let wire_coordinates = layout_all_coordinates(&wire_instructions);
+        let common_coordinates = find_common_coordinates(&wire_coordinates);
+
+        let smallest_sum = common_coordinates
+            .clone()
+            .into_iter()
+            .map(|c| find_steps_sum(c, &wire_instructions))
+            .collect::<io::Result<Vec<i32>>>()?
+            .into_iter()
+            .min();
+        smallest_sum
+            .map(|c| format!("{:?}", c))
+            .ok_or_else(|| io::Error::new(io::ErrorKind::InvalidInput, "no result"))
     }
 }
 
