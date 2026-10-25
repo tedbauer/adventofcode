@@ -91,7 +91,7 @@ fn eval_prog(prog: &mut Vec<usize>) -> io::Result<()> {
     Ok(())
 }
 
-fn eval_prog_with_inputs(mut prog: &mut Vec<usize>, noun: usize, verb: usize) -> io::Result<usize> {
+fn eval_prog_with_inputs(prog: &mut Vec<usize>, noun: usize, verb: usize) -> io::Result<usize> {
     if let Some(t) = prog.get_mut(1) {
         *t = noun;
     }
@@ -100,9 +100,9 @@ fn eval_prog_with_inputs(mut prog: &mut Vec<usize>, noun: usize, verb: usize) ->
         *t = verb;
     }
 
-    eval_prog(&mut prog);
+    eval_prog(prog);
 
-    prog.get(0)
+    prog.first()
         .ok_or_else(|| io::Error::new(io::ErrorKind::InvalidInput, "missing arg"))
         .copied()
 }
@@ -122,7 +122,7 @@ impl Solution for Day02 {
 
         eval_prog(&mut prog);
 
-        prog.get(0)
+        prog.first()
             .map(|u| u.to_string())
             .ok_or_else(|| io::Error::new(io::ErrorKind::InvalidInput, "missing arg"))
     }
@@ -133,7 +133,7 @@ impl Solution for Day02 {
         for noun in 0..100 {
             for verb in 0..100 {
                 let mut prog = parse(input)?;
-                let mut result = eval_prog_with_inputs(&mut prog, noun, verb)?;
+                let result = eval_prog_with_inputs(&mut prog, noun, verb)?;
 
                 if result == target {
                     let answer = 100 * noun + verb;
