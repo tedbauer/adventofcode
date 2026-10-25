@@ -91,6 +91,22 @@ fn eval_prog(prog: &mut Vec<usize>) -> io::Result<()> {
     Ok(())
 }
 
+fn eval_prog_with_inputs(mut prog: &mut Vec<usize>, noun: usize, verb: usize) -> io::Result<usize> {
+    if let Some(t) = prog.get_mut(1) {
+        *t = noun;
+    }
+
+    if let Some(t) = prog.get_mut(2) {
+        *t = verb;
+    }
+
+    eval_prog(&mut prog);
+
+    prog.get(0)
+        .ok_or_else(|| io::Error::new(io::ErrorKind::InvalidInput, "missing arg"))
+        .copied()
+}
+
 impl Solution for Day02 {
     fn run_part1(&self, input: &str) -> io::Result<String> {
         let mut prog = parse(input)?;
@@ -111,8 +127,21 @@ impl Solution for Day02 {
             .ok_or_else(|| io::Error::new(io::ErrorKind::InvalidInput, "missing arg"))
     }
 
-    fn run_part2(&self, _input: &str) -> io::Result<String> {
-        Ok("Not yet implemented".to_string())
+    fn run_part2(&self, input: &str) -> io::Result<String> {
+        let target = 19690720;
+
+        for noun in 0..100 {
+            for verb in 0..100 {
+                let mut prog = parse(input)?;
+                let mut result = eval_prog_with_inputs(&mut prog, noun, verb)?;
+
+                if result == target {
+                    let answer = 100 * noun + verb;
+                    return Ok(format!("noun: {noun}. verb: {verb}. answer: {answer}"));
+                }
+            }
+        }
+        Ok("none found".to_string())
     }
 }
 
